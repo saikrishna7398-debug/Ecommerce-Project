@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Tracker - MyShop</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(90deg, #ff9900, #fca311);
+        padding: 20px 0;
+        text-align: center;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      header p {
+        margin: 5px 0 0 0;
+        font-size: 1rem;
+      }
+
+      .container {
+        max-width: 650px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      label {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      input {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border 0.3s, box-shadow 0.3s;
+      }
+
+      input:focus {
+        border-color: #ff9900;
+        box-shadow: 0 0 5px rgba(255, 153, 0, 0.5);
+        outline: none;
+      }
+
+      button {
+        padding: 12px;
+        background: linear-gradient(90deg, #ff9900, #fca311);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: linear-gradient(90deg, #fca311, #ff9900);
+        transform: translateY(-2px);
+      }
+
+      /* Card Divs */
+      .card {
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-top: 30px;
+        transition: transform 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+      }
+
+      .order-details {
+        background-color: #fff3cd; /* light yellow */
+        border-left: 5px solid #ffc107;
+      }
+
+      .order-items {
+        background-color: #d1ecf1; /* light blue */
+        border-left: 5px solid #17a2b8;
+      }
+
+      .updates {
+        background-color: #d4edda; /* light green */
+        border-left: 5px solid #28a745;
+      }
+
+      .card h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .card p,
+      .card li {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .card li {
+        background: #ffffff;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .error-message {
+        color: #d9534f;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      @media (max-width: 700px) {
+        .container {
+          margin: 20px;
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>MyShop</h1>
+      <p>Reliable Shopping, Delivered Fast</p>
+    </header>
+
+    <div class="container">
+      <h2 class="text-center mb-4">Track Your Order</h2>
+      <form action="/shop/tracker/" method="post">
+        {% csrf_token %}
+        <div>
+          <label for="orderid">Order ID</label>
+          <input
+            type="text"
+            name="orderid"
+            placeholder="Enter your order ID"
+            required
+          />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+        <button type="submit">Track Order</button>
+      </form>
+
+      {% if order %}
+      <div class="card order-details">
+        <h3>Order Details</h3>
+        <p><b>Order ID:</b> {{ order.order_id }}</p>
+        <p><b>Status:</b> Placed</p>
+      </div>
+
+      <div class="card order-items">
+        <h3>Ordered Items</h3>
+        {% if items %}
+        <ul>
+          {% for item in items %}
+          <li>
+            <b>{{ item.name }}</b> - Qty: {{ item.quantity }} - Price:
+            ₹{{item.price }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No items found for this order.</p>
+        {% endif %}
+      </div>
+
+      <div class="card updates">
+        <h3>Order Updates</h3>
+        {% if updates %}
+        <ul>
+          {% for u in updates %}
+          <li><b>{{ u.timstamps }}:</b> {{ u.update_desc }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No updates yet for this order.</p>
+        {% endif %}
+      </div>
+
+      {% elif error_message %}
+      <p class="error-message">{{ error_message }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

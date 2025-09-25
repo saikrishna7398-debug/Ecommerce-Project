@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f4f6f9;
+        color: #333;
+      }
+
+      .nav {
+        padding: 20px;
+        background: #1d3557;
+        color: white;
+        margin: 0;
+        display: flex;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 30px auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 20px;
+      }
+
+      /* Cart Preview */
+      #cartPreview {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      #cartPreview h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .cart-item img {
+        border-radius: 6px;
+      }
+
+      .cart-total {
+        margin-top: 15px;
+        font-size: 18px;
+        text-align: right;
+        color: #e63946;
+      }
+
+      .text-muted {
+        color: #888;
+        text-align: center;
+      }
+
+      /* Checkout Form */
+      #checkoutForm {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 12px;
+        margin-bottom: 5px;
+      }
+
+      input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 12px;
+        background: #457b9d;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #1d3557;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+      }
+      .nav {
+      }
+      .m {
+        margin-left: 20px;
+      }
+      .n {
+        margin-left: 480px;
+      }
+      .h {
+        margin-left: 400px;
+      }
+      .link-no-style {
+        color: inherit;
+        text-decoration: none;
+        color: ;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <h1 class="m" style="color: orange">My Shop</h1>
+      <h1 class="n">Checkout Page</h1>
+      <h1 class="h">
+        <a href="{% url 'shop' %}" class="link-no-style">Home</a>
+      </h1>
+    </div>
+
+    <div class="container">
+      <!-- Cart items preview -->
+      <div id="cartPreview">
+        <h3>Showing items...</h3>
+      </div>
+
+      <!-- Checkout form -->
+      <div id="checkoutForm" style="display: none">
+        <form action="/shop/checkout/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="items_json" id="items_json" />
+          <input type="hidden" name="amount" id="amount" />
+
+          <label for="name">Name</label>
+          <input type="text" name="name" placeholder="Name" required />
+
+          <label for="email">Email</label>
+          <input type="email" name="email" placeholder="Email" required />
+
+          <label for="address1">Address 1</label>
+          <input
+            type="text"
+            name="address1"
+            placeholder="Address Line 1"
+            required
+          />
+
+          <label for="address2">Address 2</label>
+          <input type="text" name="address2" placeholder="Address Line 2" />
+
+          <label for="city">City</label>
+          <input type="text" name="city" placeholder="City" required />
+
+          <label for="state">State</label>
+          <input type="text" name="state" placeholder="State" required />
+
+          <label for="phone">Phone</label>
+          <input type="tel" name="phone" placeholder="Phone Number" required />
+
+          <button type="submit">Place Order</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+      function renderCartPreview() {
+        const preview = document.getElementById("cartPreview");
+        const checkoutForm = document.getElementById("checkoutForm");
+        preview.innerHTML = "";
+
+        const items = Object.values(cart).filter(
+          (item) => item && item.name && item.price !== undefined && item.qty
+        );
+
+        if (!items.length) {
+          preview.innerHTML = '<p class="text-muted">Cart is empty</p>';
+          checkoutForm.style.display = "none";
+          return;
+        }
+
+        checkoutForm.style.display = "block";
+
+        let total = 0;
+        items.forEach((item) => {
+          const price = parseFloat(item.price) || 0;
+          total += price * item.qty;
+          const imgSrc = item.image || "{% static 'shop/images/no-image.png' %}";
+          preview.innerHTML += `
+            <div class="cart-item">
+                <img src="${imgSrc}" alt="${item.name}" width="50"/>
+                <div>
+                    <div>${item.name}</div>
+                    <small>₹${price} × ${item.qty}</small>
+                </div>
+            </div>`;
+        });
+
+        preview.innerHTML += `<div class="cart-total"><strong>Total: ₹${total}</strong></div>`;
+
+        // ✅ Set hidden inputs
+        $('#items_json').val(JSON.stringify(cart));
+        $('#amount').val(total); // amount set using jQuery
+      }
+
+      {% if thank %}
+      alert("Your order is confirmed 🎉 You can track it with Order ID: {{id}}");
+      localStorage.removeItem("cart");
+      document.location = "/shop";
+      {% endif %}
+
+      window.onload = renderCartPreview;
+    </script>
+  </body>
+</html>
