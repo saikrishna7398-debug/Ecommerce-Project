@@ -14,6 +14,8 @@
       body {
         background-color: #cccccc;
       }
+
+      /* Cart Item */
       .cart-item {
         display: flex;
         align-items: center;
@@ -45,27 +47,59 @@
         padding: 0;
       }
 
+      /* Product Image */
       .ethnic-img {
-        width: 220px; /* fixed width */
-        height: 500px; /* fixed height */
-        object-fit: cover; /* crop proportionally without stretching */
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        object-fit: cover;
         display: block;
-        margin: 0 auto; /* center inside the card */
-        border-radius: 5px; /* optional rounded corners */
-        background-color: #f8f8f8; /* fallback background */
+        margin: 0 auto;
+        border-radius: 5px;
+        background-color: #f8f8f8;
       }
+
+      /* Search Input */
       .l {
-        margin-left: 100px;
-        width: 750px;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
       }
       .l:hover {
         border: 2px solid orange;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        /* Navbar search form */
+        .l {
+          max-width: 100%;
+          margin: 10px 0;
+        }
+
+        /* Product cards */
+        .col-md-4 {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+
+        .card-img-top {
+          max-height: 220px;
+        }
+      }
+
+      @media (min-width: 769px) and (max-width: 1200px) {
+        /* Tablets show 2 cards per row */
+        .col-md-4 {
+          flex: 0 0 50%;
+          max-width: 50%;
+        }
       }
     </style>
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#" style="color: orange"><b>MyShop</b></a>
         <button
@@ -198,7 +232,7 @@
                       >
                         Add to Cart
                       </button>
-                      <a href="/shop/product/{{ product.product_id }}">
+                      <a href="/product/{{ product.product_id }}">
                         <button
                           style="
                             background-color: rgb(110, 244, 110);

@@ -28,35 +28,66 @@
         overflow: hidden;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         transition: transform 0.25s ease, box-shadow 0.25s ease;
+        display: flex;
+        flex-direction: column;
         height: 100%;
       }
 
-      .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      @media (hover: hover) {
+        .card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
       }
 
-      .card-img-top {
-        height: 450px;
+      /* Image container to maintain aspect ratio */
+      .img-container {
+        position: relative;
         width: 100%;
+        padding-top: 75%; /* maintains 4:3 ratio */
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: #e9ecef; /* placeholder background */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .img-container img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: auto; /* let width scale automatically */
+        height: 100%; /* fill the container height */
+        transform: translate(-50%, -50%);
         object-fit: cover;
       }
 
       .card-body {
         padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
       .card-title {
         font-size: 1.1rem;
         font-weight: 600;
-        margin-bottom: 8px;
         color: #333;
+        margin-bottom: 4px;
       }
 
       .card-text {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: #666;
         min-height: 50px;
+        margin: 0;
+      }
+
+      .price-row {
+        margin: 6px 0;
+        font-weight: 700;
+        color: #198754;
       }
 
       .btn-custom {
@@ -66,11 +97,13 @@
         font-weight: 500;
         padding: 8px 14px;
         border-radius: 8px;
-        transition: background-color 0.2s ease;
+        transition: background-color 0.2s ease, transform 0.08s ease;
       }
 
-      .btn-custom:hover {
+      .btn-custom:hover,
+      .btn-custom:focus {
         background-color: #e65c00;
+        transform: translateY(-1px);
       }
 
       .no-results {
@@ -78,6 +111,48 @@
         margin-top: 100px;
         font-size: 1.3rem;
         color: #6c757d;
+      }
+
+      /* Responsive tweaks */
+      @media (max-width: 992px) {
+        .card-title {
+          font-size: 1.05rem;
+        }
+        .card-text {
+          font-size: 0.92rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .results-container {
+          margin: 20px auto;
+          padding: 0 12px;
+        }
+        .img-container {
+          padding-top: 56.25%;
+        } /* 16:9 on tablet */
+        .card-title {
+          font-size: 1rem;
+        }
+        .card-text {
+          font-size: 0.88rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .col-sm-6 {
+          flex: 0 0 100% !important;
+          max-width: 100% !important;
+        }
+        .img-container {
+          padding-top: 56.25%;
+        }
+        .card-body {
+          padding: 12px;
+        }
+        .btn-custom {
+          padding: 10px;
+        }
       }
     </style>
   </head>
@@ -90,23 +165,22 @@
         {% for result in results %}
         <div class="col-md-4 col-sm-6">
           <div class="card h-100">
-            <img
-              src="{% if result.image %}{{ result.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
-              class="card-img-top"
-              alt="{{ result.product_name }}"
-            />
-            <div class="card-body d-flex flex-column">
+            <div class="img-container">
+              <img
+                src="{% if result.image %}{{ result.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+                alt="{{ result.product_name }}"
+              />
+            </div>
+            <div class="card-body">
               <h5 class="card-title">{{ result.product_name }}</h5>
               <p class="card-text">{{ result.description|truncatewords:18 }}</p>
-              <p><b>Price : </b>{{result.price}}</p>
-              <div class="mt-auto">
-                <a
-                  href="{% url 'product' myid=result.product_id %}"
-                  class="btn btn-custom btn-sm w-100"
-                >
-                  View Product
-                </a>
-              </div>
+              <p class="price-row">Price: ₹{{ result.price }}</p>
+              <a
+                href="{% url 'product' myid=result.product_id %}"
+                class="btn btn-custom btn-sm w-100"
+              >
+                View Product
+              </a>
             </div>
           </div>
         </div>

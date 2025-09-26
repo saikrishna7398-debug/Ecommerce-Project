@@ -92,7 +92,7 @@
   <body>
     <div class="container">
       <h1>Contact Us</h1>
-      <form action="/shop/contact/" method="post" id="contactForm">
+      <form action="{% url 'contact' %}" method="post" id="contactForm">
         {% csrf_token %}
         <div class="form-group">
           <label for="name">Name</label>
@@ -114,6 +114,7 @@
     <script>
       {% if sai %}
         alert("Your response has been registered!");
+        window.location.href = "{% url 'shop' %}";
       {% endif %}
     </script>
   </body>

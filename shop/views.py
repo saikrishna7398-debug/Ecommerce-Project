@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import Product, Contact, Order, OrderUpdate
 from math import ceil
@@ -92,16 +92,19 @@ def tracker(request):
     return render(request, "shop/tracker.html", context)
 
 # Contact page
+
 def contact(request):
-    sai=None
     if request.method == "POST":
         name = request.POST.get("name", "")
         email = request.POST.get("email", "")
         desc = request.POST.get("desc", "")
-        contact = Contact(name=name, email=email, desc=desc)
-        contact.save()
-        sai=True
-    return render(request, "shop/contact.html",{"sai":sai})
+        Contact.objects.create(name=name, email=email, desc=desc)
+        # Use query parameter to trigger alert
+        return redirect('/contact/?submitted=True')
+    
+    # Check for query parameter
+    sai = request.GET.get('submitted') == 'True'
+    return render(request, "shop/contact.html", {"sai": sai})
 
 # Product details page
 def product(request, myid):

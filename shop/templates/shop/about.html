@@ -1,22 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>About Us | My Shop</title>
-    {% load static %}
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+      .about-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+      ul li {
+        margin-bottom: 8px;
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="/" style="color: orange; margin-left: 0px"
-          >MyShop</a
-        >
+        <a class="navbar-brand" href="/" style="color: orange">MyShop</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -28,13 +37,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/shop">Home</a>
+              <a class="nav-link" href="{%url  'shop' %}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="/about">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{%url 'contact'%}">Contact</a>
+              <a class="nav-link" href="{% url 'contact' %}">Contact</a>
             </li>
           </ul>
         </div>
@@ -46,21 +55,18 @@
       <div class="container">
         <div class="row align-items-center">
           <!-- Image -->
-          <div class="col-md-6 mb-4">
+          <div class="col-md-6 mb-4 text-center text-md-start">
             <img
               src="{% static 'myshop.webp' %}"
               alt="About My Shop"
-              class="img-fluid rounded shadow"
-              id="image"
-              style="height: 350px; width: 350px; margin-left: 120px"
+              class="img-fluid rounded shadow about-image"
             />
           </div>
 
           <!-- Content -->
           <div class="col-md-6">
             <h1 class="mb-4">
-              About
-              <span style="color: orange">MyShop</span>
+              About <span style="color: orange">MyShop</span>
             </h1>
             <p class="lead">
               Welcome to <strong>MyShop</strong> – your trusted online
@@ -68,10 +74,10 @@
             </p>
             <p>
               Founded with the vision of making shopping easier and more
-              enjoyable, My Shop offers a wide variety of categories including
-              fashion, electronics, home essentials, and much more. We believe
-              in providing not just products, but also a hassle-free experience
-              with reliable customer support and secure checkout.
+              enjoyable, MyShop offers a wide variety of categories including
+              fashion, electronics, home essentials, and much more. We provide
+              not just products, but also a hassle-free experience with reliable
+              customer support and secure checkout.
             </p>
             <p>
               Our mission is simple:
@@ -79,8 +85,8 @@
                 >to deliver quality, affordability, and convenience at your
                 fingertips.</em
               >
-              Whether you are shopping for daily needs or special occasions, My
-              Shop is here to serve you.
+              Whether you are shopping for daily needs or special occasions,
+              MyShop is here to serve you.
             </p>
 
             <h4 class="mt-4">Why Choose Us?</h4>

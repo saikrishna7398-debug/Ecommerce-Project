@@ -33,7 +33,7 @@
       }
 
       .container {
-        max-width: 650px;
+        max-width: 700px;
         margin: 40px auto;
         background: #fff;
         padding: 40px 30px;
@@ -142,10 +142,35 @@
         margin-top: 30px;
       }
 
-      @media (max-width: 700px) {
+      /* Responsive */
+      @media (max-width: 768px) {
         .container {
-          margin: 20px;
+          margin: 20px 15px;
           padding: 30px 20px;
+        }
+        .card {
+          padding: 15px;
+        }
+        header h1 {
+          font-size: 1.7rem;
+        }
+        header p {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        input,
+        button {
+          font-size: 14px;
+          padding: 10px;
+        }
+        .card h3 {
+          font-size: 1.1rem;
+        }
+        .card li {
+          font-size: 14px;
+          padding: 8px 12px;
         }
       }
     </style>
@@ -159,7 +184,7 @@
 
     <div class="container">
       <h2 class="text-center mb-4">Track Your Order</h2>
-      <form action="/shop/tracker/" method="post">
+      <form action="" method="post">
         {% csrf_token %}
         <div>
           <label for="orderid">Order ID</label>
