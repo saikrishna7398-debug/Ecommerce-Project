@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout</title>
+    <title>Checkout - My Shop</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -118,7 +118,6 @@
         background: #1d3557;
       }
 
-      /* Responsive */
       @media (max-width: 768px) {
         .container {
           grid-template-columns: 1fr;
@@ -141,12 +140,12 @@
     </div>
 
     <div class="container">
-      <!-- Cart items preview -->
+      <!-- Cart Preview -->
       <div id="cartPreview">
         <h3>Showing items...</h3>
       </div>
 
-      <!-- Checkout form -->
+      <!-- Checkout Form -->
       <div id="checkoutForm" style="display: none">
         <form action="{% url 'checkout' %}" method="post">
           {% csrf_token %}
@@ -193,9 +192,7 @@
         const checkoutForm = document.getElementById("checkoutForm");
         preview.innerHTML = "";
 
-        const items = Object.values(cart).filter(
-          (item) => item && item.name && item.price !== undefined && item.qty
-        );
+        const items = Object.values(cart).filter(item => item && item.name && item.price !== undefined && item.qty);
 
         if (!items.length) {
           preview.innerHTML = '<p class="text-muted">Cart is empty</p>';
@@ -206,28 +203,27 @@
         checkoutForm.style.display = "block";
 
         let total = 0;
-        items.forEach((item) => {
+        items.forEach(item => {
           const price = parseFloat(item.price) || 0;
           total += price * item.qty;
           const imgSrc = item.image || "{% static 'shop/images/no-image.png' %}";
           preview.innerHTML += `
             <div class="cart-item">
-                <img src="${imgSrc}" alt="${item.name}" />
-                <div>
-                    <div>${item.name}</div>
-                    <small>₹${price} × ${item.qty}</small>
-                </div>
+              <img src="${imgSrc}" alt="${item.name}" />
+              <div>
+                <div>${item.name}</div>
+                <small>₹${price} × ${item.qty}</small>
+              </div>
             </div>`;
         });
 
         preview.innerHTML += `<div class="cart-total"><strong>Total: ₹${total}</strong></div>`;
-
         $('#items_json').val(JSON.stringify(cart));
         $('#amount').val(total);
       }
 
       {% if thank %}
-        alert("Your order is confirmed 🎉 You can track it with Order ID: {{id}}");
+        alert("Your order is confirmed 🎉 You can track it with Order ID: {{ id }}");
         localStorage.removeItem("cart");
         document.location = "{% url 'shop' %}";
       {% endif %}

@@ -71,25 +71,20 @@
 
       /* Responsive Adjustments */
       @media (max-width: 768px) {
-        /* Navbar search form */
         .l {
           max-width: 100%;
           margin: 10px 0;
         }
-
-        /* Product cards */
         .col-md-4 {
           flex: 0 0 100%;
           max-width: 100%;
         }
-
         .card-img-top {
           max-height: 220px;
         }
       }
 
       @media (min-width: 769px) and (max-width: 1200px) {
-        /* Tablets show 2 cards per row */
         .col-md-4 {
           flex: 0 0 50%;
           max-width: 50%;
@@ -112,7 +107,6 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Search Form -->
           <form class="d-flex me-auto" method="GET" action="{% url 'search' %}">
             <input
               class="form-control me-2 l"
@@ -131,7 +125,6 @@
             </button>
           </form>
 
-          <!-- Navbar Links -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <a class="nav-link active" href="#">Home</a>
@@ -146,7 +139,6 @@
               <a class="nav-link" href="{% url 'tracker' %}">Track</a>
             </li>
 
-            <!-- Cart Button -->
             <li class="nav-item dropdown">
               <a
                 href="#"
@@ -195,7 +187,7 @@
               <div class="col-md-4 mb-3">
                 <div class="card h-100">
                   <img
-                    src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+                    src="{% if product.image %}{{ product.image.url }}{% else %}{{ MEDIA_URL }}no-image.png{% endif %}"
                     class="card-img-top ethnic-img"
                     style="
                       height: 310px;
@@ -206,7 +198,6 @@
                     "
                     alt="{{ product.product_name }}"
                   />
-
                   <div class="card-body">
                     <h5 class="card-title">{{ product.product_name }}</h5>
                     <p class="card-text">{{ product.product_desc }}</p>
@@ -217,7 +208,7 @@
                       data-id="{{ product.product_id }}"
                       data-name="{{ product.product_name }}"
                       data-price="{{ product.price }}"
-                      data-image="{% if product.image %}{{ product.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+                      data-image="{% if product.image %}{{ product.image.url }}{% else %}{{ MEDIA_URL }}no-image.png{% endif %}"
                     >
                       <button
                         class="btn btn-primary add-to-cart"
@@ -228,7 +219,7 @@
                         "
                         data-name="{{ product.product_name }}"
                         data-price="{{ product.price }}"
-                        data-image="{% if product.image %}{{ product.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+                        data-image="{% if product.image %}{{ product.image.url }}{% else %}{{ MEDIA_URL }}no-image.png{% endif %}"
                       >
                         Add to Cart
                       </button>
@@ -253,7 +244,6 @@
           </div>
           {% endfor %}
         </div>
-
         <div class="d-flex justify-content-between mt-3">
           <button
             class="btn btn-outline-dark"
@@ -276,7 +266,7 @@
     </div>
     {% endfor %}
 
-    <!-- Search Results Section -->
+    <!-- Search Results -->
     {% if query %} {% if result %}
     <div class="container my-5">
       <h3 class="mb-3">Search Results for "{{ query }}"</h3>
@@ -285,7 +275,7 @@
         <div class="col-md-4 mb-3">
           <div class="card h-100">
             <img
-              src="{% if p.image %}{{ p.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+              src="{% if p.image %}{{ p.image.url }}{% else %}{{ MEDIA_URL }}no-image.png{% endif %}"
               class="card-img-top"
               style="height: 200px; object-fit: cover"
               alt="{{ p.product_name }}"
@@ -308,6 +298,7 @@
       alert("No products match your search query!");
     </script>
     {% endif %} {% endif %}
+
     <footer class="bg-dark text-light py-3 text-center">
       <p class="mb-0">&copy; 2025 My Shop. All Rights Reserved.</p>
     </footer>
@@ -345,8 +336,9 @@
         items.forEach((item) => {
           const price = parseFloat(item.price) || 0;
           total += price * item.qty;
-          const imgSrc =
-            item.image || "{% static 'shop/images/no-image.png' %}";
+          const imgSrc = item.image
+            ? item.image
+            : "{{ MEDIA_URL }}no-image.png";
           preview.innerHTML += `
           <div class="cart-item">
             <img src="${imgSrc}" alt="${item.name}" />

@@ -40,14 +40,13 @@
         }
       }
 
-      /* Image container to maintain aspect ratio */
       .img-container {
         position: relative;
         width: 100%;
-        padding-top: 75%; /* maintains 4:3 ratio */
+        padding-top: 75%;
         overflow: hidden;
         border-radius: 8px;
-        background-color: #e9ecef; /* placeholder background */
+        background-color: #e9ecef;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -57,8 +56,8 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: auto; /* let width scale automatically */
-        height: 100%; /* fill the container height */
+        width: auto;
+        height: 100%;
         transform: translate(-50%, -50%);
         object-fit: cover;
       }
@@ -113,7 +112,6 @@
         color: #6c757d;
       }
 
-      /* Responsive tweaks */
       @media (max-width: 992px) {
         .card-title {
           font-size: 1.05rem;
@@ -130,7 +128,7 @@
         }
         .img-container {
           padding-top: 56.25%;
-        } /* 16:9 on tablet */
+        }
         .card-title {
           font-size: 1rem;
         }
@@ -167,7 +165,7 @@
           <div class="card h-100">
             <div class="img-container">
               <img
-                src="{% if result.image %}{{ result.image.url }}{% else %}{% static 'shop/images/no-image.png' %}{% endif %}"
+                src="{% if result.image %}{{ result.image.url }}{% else %}{{ MEDIA_URL }}no-image.png{% endif %}"
                 alt="{{ result.product_name }}"
               />
             </div>
