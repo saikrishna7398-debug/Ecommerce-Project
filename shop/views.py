@@ -6,8 +6,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 
-# Import Paytm checksum
-import paytmchecksum
+
 
 # Staging Merchant Key (Demo)
 PAYTM_MERCHANT_KEY = 'kbzk5y3adk7!bpkz'
